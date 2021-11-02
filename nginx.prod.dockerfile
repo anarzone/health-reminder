@@ -9,7 +9,10 @@ ARG NGINXUSER
 ENV NGINXGROUP=hr
 ENV NGINXUSER=hr
 
-ADD nginx/default.conf /etc/nginx/conf.d/default.conf
+ADD nginx/default.prod.conf /etc/nginx/conf.d/default.conf
+
+ADD nginx/health-reminder.io.pem /etc/nginx/certs/health-reminder.io.pem
+ADD nginx/health-reminder.io-key.pem /etc/nginx/certs/health-reminder.io-key.pem
 
 RUN sed -i "s/user www-data/user ${NGINXUSER}/g" /etc/nginx/nginx.conf
 
