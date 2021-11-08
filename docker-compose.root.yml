@@ -4,13 +4,13 @@ networks:
   laravel:
 
 services:
-  nginx:
+  site:
     build:
-      context: .
-      dockerfile: nginx.prod.dockerfile
+      context: ./dockerfiles
+      dockerfile: nginx.root.dockerfile
     container_name: nginx
     ports:
-      - "8080:80"
+      - 80:80
     volumes:
       - ./src:/var/www/html:delegated
     depends_on:
@@ -22,19 +22,17 @@ services:
       - laravel
 
   mysql:
-    image: mariadb:10.5
+    image: mariadb:10.6
     container_name: mysql
     restart: unless-stopped
     tty: true
     ports:
-      - "3306:3306"
-    volumes:
-      - ./mysql:/var/lib/mysql
+      - 3306:3306
     environment:
-      MYSQL_DATABASE: health-reminder
-      MYSQL_USER: hr
-      MYSQL_PASSWORD: 5862616@nAr
-      MYSQL_ROOT_PASSWORD: 5862616@nAr
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
     networks:
@@ -42,11 +40,11 @@ services:
 
   php:
     build:
-      context: .
-      dockerfile: php.prod.dockerfile
+      context: ./dockerfiles
+      dockerfile: php.root.dockerfile
     container_name: php
     volumes:
-      - ./src:/var/www/html
+      - ./src:/var/www/html:delegated
     networks:
       - laravel
 
@@ -55,20 +53,19 @@ services:
     container_name: redis
     restart: unless-stopped
     ports:
-      - "6379:6379"
+      - 6379:6379
     networks:
       - laravel
 
   composer:
-    build:
-      context: .
-      dockerfile: composer.dockerfile
+    image: composer:2
     container_name: composer
     volumes:
       - ./src:/var/www/html
     working_dir: /var/www/html
     depends_on:
       - php
+    user: root
     entrypoint: ['composer', '--ignore-platform-reqs']
     networks:
       - laravel
@@ -79,8 +76,8 @@ services:
     volumes:
       - ./src:/var/www/html
     ports:
-      - "3000:3000"
-      - "3001:3001"
+      - 3000:3000
+      - 3001:3001
     working_dir: /var/www/html
     entrypoint: ['npm']
     networks:
@@ -88,8 +85,8 @@ services:
 
   artisan:
     build:
-      context: .
-      dockerfile: php.dockerfile
+      context: ./dockerfiles
+      dockerfile: php.root.dockerfile
     container_name: artisan
     volumes:
       - ./src:/var/www/html:delegated
@@ -104,7 +101,7 @@ services:
     image: mailhog/mailhog:latest
     container_name: mailhog
     ports:
-      - "1025:1025"
-      - "8025:8025"
+      - 1025:1025
+      - 8025:8025
     networks:
       - laravel
