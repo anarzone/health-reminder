@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             Colors::class,
             Shapes::class,
+            PermissionSeeder::class,
         ]);
     }
 }
