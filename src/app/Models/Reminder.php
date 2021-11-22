@@ -14,7 +14,7 @@ class Reminder extends Model
     const STATUS_DONE = 2;
     const STATUS_MISSED = 3;
 
-    protected $guarded = [];
+    protected $fillable = ['title','description','status','shape_id','color_id'];
 
     public function dateSchedule(){
         return $this->hasOne(DateSchedule::class,'reminder_id');

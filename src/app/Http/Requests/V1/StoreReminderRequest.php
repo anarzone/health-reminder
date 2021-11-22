@@ -24,6 +24,7 @@ class StoreReminderRequest extends FormRequest
     public function rules()
     {
         return [
+            'id' => 'nullable|exists:reminders,id,deleted_at,NULL',
             'title' => 'required|string',
             'description' => 'required|string',
             'shape_id' => 'required|numeric',
@@ -33,5 +34,14 @@ class StoreReminderRequest extends FormRequest
             'time_schedules.*.dose' => 'required|numeric',
             'start_date' => 'required|date'
         ];
+
+    }
+
+    public function getValidatorInstance()
+    {
+        if($this->isMethod('patch')){
+            $this->request->add(['id' => intval($this->route('reminderId'))]);
+        }
+        return parent::getValidatorInstance();
     }
 }

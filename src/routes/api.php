@@ -17,13 +17,20 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('reminders')->name('reminders.')->group(function () {
         Route::get('/', [ReminderController::class, 'index'])->name('index');
+        Route::get('{reminderId}', [ReminderController::class, 'edit'])->name('edit');
+        Route::delete('{reminderId}', [ReminderController::class, 'delete'])->name('delete');
         Route::post('store', [ReminderController::class, 'store'])->name('store');
+        Route::patch('{reminderId}', [ReminderController::class, 'update'])->name('update');
+
+        Route::prefix('assets')->name('assets.')->group(function () {
+            Route::get('colors',[ReminderController::class,'getColors'])->name('colors');
+            Route::get('shapes',[ReminderController::class,'getShapes'])->name('shapes');
+        });
     });
 
     Route::prefix('users')->name('users.')->group(function () {
         Route::post('store', [UserController::class, 'store'])->name('store');
     });
-
 
     Route::prefix('articles')->name('articles.')->group(function () {
         Route::get('/', [ArticleController::class, 'index'])->name('index');
