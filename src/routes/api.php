@@ -6,13 +6,17 @@ use App\Http\Controllers\V1\ReminderController;
 use App\Http\Controllers\V1\UserController;
 use App\Http\Controllers\V1\ArticleController;
 use App\Http\Controllers\V1\Auth\AuthController;
+use App\Http\Controllers\V1\Auth\SocialController;
 
 
 Route::prefix('v1')->group(function () {
 
-    Route::prefix('auth')->name('auth')->group(function () {
+    Route::prefix('auth')->name('auth.')->group(function () {
         Route::post('login',[AuthController::class,'login'])->name('login');
         Route::post('logout',[AuthController::class,'logout'])->name('logout');
+
+        Route::get('{provider}',[SocialController::class,'handleRedirect'])->name('handleRedirect');
+        Route::get('{provider}/callback',[SocialController::class,'handleCallback'])->name('handleCallback');
     });
 
     Route::prefix('reminders')->name('reminders.')->group(function () {
