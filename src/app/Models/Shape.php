@@ -12,5 +12,7 @@ class Shape extends Model
 
     protected $guarded = [];
 
+    protected $fillable = ['name'];
+
     public $translatable = ['name'];
 }
