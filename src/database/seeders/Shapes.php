@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Shape;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Schema;
 
 class Shapes extends Seeder
 {
@@ -15,20 +16,33 @@ class Shapes extends Seeder
     public function run()
     {
         $shapes = [
-            ['name' => json_encode([
-                'az' => 'Round',
-                'en' => 'Yumru',
-            ])],
-            ['name' => json_encode([
-                'az' => 'Oval',
-                'en' => 'Oval',
-            ])],
-            ['name' => json_encode([
-                'az' => 'Dördbucaqlı',
-                'en' => 'Rectangle',
-            ])],
+            ['name' => json_encode(
+                [
+                    'az' => 'Yumru',
+                    'en' => 'Round',
+                ])],
+            ['name' => json_encode(
+                [
+                    'az' => 'Oval',
+                    'en' => 'Oval',
+                ])],
+            ['name' => json_encode(
+                [
+                    'az' => 'Kapsul',
+                    'en' => 'Capsule',
+                ])
+            ],
+            ['name' => json_encode(
+                [
+                    'az' => 'Dördbucaqlı',
+                    'en' => 'Square',
+                ])
+            ],
         ];
 
+        Schema::disableForeignKeyConstraints();
+        Shape::truncate();
         Shape::insert($shapes);
+        Schema::enableForeignKeyConstraints();
     }
 }

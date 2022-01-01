@@ -5,7 +5,6 @@ namespace App\Services;
 use App\Models\SocialAccount;
 use App\Models\User;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Auth;
 
 class SocialAccountService
 {

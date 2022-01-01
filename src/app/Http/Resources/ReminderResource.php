@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ReminderResource extends JsonResource
@@ -19,10 +20,11 @@ class ReminderResource extends JsonResource
             'title' => $this->title,
             'description' => $this->description,
             'status' => $this->status,
-            'start_date' => $this->dateSchedule->start_date,
-            'end_date' => $this->dateSchedule->end_date,
+            'start_date' => Carbon::make($this->dateSchedule->start_date)->toDateString(),
+            'end_date' => Carbon::make($this->dateSchedule->end_date)->toDateString(),
             'every_selected_day' => $this->dateSchedule->every_selected_day,
             'time_schedules' => TimeScheduleResource::collection($this->timeSchedules),
+            'shape' => $this->shape->name
         ];
     }
 }

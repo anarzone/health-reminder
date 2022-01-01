@@ -25,12 +25,16 @@ class ReminderService
 
         if(isset($filters)){
             $query = $query->join('date_schedules as d', 'reminders.id','=','d.reminder_id');
+            $query = $query->join('shapes as sh', 'sh.id','=','reminders.shape_id');
 
             if(isset($filters['from'])){
                 $query = $query->whereDate('d.start_date','>=', Carbon::make($filters['from'])->toDate());
             }
             if (isset($filters['to'])){
                 $query = $query->whereDate('d.end_date','<=', Carbon::make($filters['to'])->toDate());
+            }
+            if(isset($filters['shape'])){
+                $query = $query->where('sh.id','=',intval($filters['shape']));
             }
         }
 
@@ -42,7 +46,7 @@ class ReminderService
     }
 
     public function store($data){
-        $reminder = $this->reminderModel->updateOrCreate(['id' => intval($data['id']) ?? null], [
+        $reminder = $this->reminderModel->updateOrCreate(['id' => $data['id'] ?? null], [
             'title' => $data['title'],
             'description' => $data['description'],
             'shape_id' => $data['shape_id'],
@@ -51,8 +55,8 @@ class ReminderService
 
         if(isset($data['start_date']) && isset($data['end_date'])){
             $reminder->dateSchedule()->create([
-                'start_date' => $data['start_date'],
-                'end_date' => $data['end_date'],
+                'start_date' => Carbon::make($data['start_date'])->toDate(),
+                'end_date' => Carbon::make($data['end_date'])->toDate(),
                 'every_selected_day' => $data['every_selected_day'],
             ]);
         }
