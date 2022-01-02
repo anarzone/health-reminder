@@ -13,4 +13,5 @@ class TimeSchedule extends Model
     const STATUS_DONE = 2;
     const STATUS_MISSED = 3;
 
+    protected $fillable = ['time', 'dose', 'status', 'reminder_id'];
 }

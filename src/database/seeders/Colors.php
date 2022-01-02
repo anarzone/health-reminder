@@ -2,8 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Color;
+use App\Models\Shape;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class Colors extends Seeder
 {
@@ -14,7 +17,9 @@ class Colors extends Seeder
      */
     public function run()
     {
-        DB::table('colors')->insert([
+        Schema::disableForeignKeyConstraints();
+        Color::truncate();
+        Color::insert([
             ['code' => '#F08080', 'order' => 1],
             ['code' => '#FFA07A', 'order' => 2],
             ['code' => '#6495ED', 'order' => 3],
@@ -24,5 +29,6 @@ class Colors extends Seeder
             ['code' => '#76D7C4', 'order' => 7],
             ['code' => '#F7F9F9', 'order' => 8],
         ]);
+        Schema::disableForeignKeyConstraints();
     }
 }
