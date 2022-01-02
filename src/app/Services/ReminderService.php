@@ -8,12 +8,14 @@ use App\Http\Resources\ShapeResource;
 use App\Models\Color;
 use App\Models\Reminder;
 use App\Models\Shape;
+use App\Models\TimeSchedule;
 use Illuminate\Support\Carbon;
 
 class ReminderService
 {
     public function __construct(
-        private Reminder $reminderModel
+        private Reminder $reminderModel,
+        private TimeSchedule $timeScheduleModel
     ){}
 
     /**
@@ -69,6 +71,14 @@ class ReminderService
         $reminder->timeSchedules()->insert($timeSchedules);
 
         return new ReminderResource($reminder);
+    }
+
+    public function updateStatus($id, $status){
+        return $this->reminderModel->find($id)->update(['status' => $status]);
+    }
+
+    public function updateTimeScheduleStatus($timeScheduleId, $status){
+        return $this->timeScheduleModel->find($timeScheduleId)->update(['status' => $status]);
     }
 
     public function delete($id){

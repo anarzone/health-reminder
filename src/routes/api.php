@@ -24,6 +24,9 @@ Route::prefix('v1')->group(function () {
         Route::delete('{reminderId}', [ReminderController::class, 'delete'])->name('delete');
         Route::post('store', [ReminderController::class, 'store'])->name('store');
         Route::patch('{reminderId}', [ReminderController::class, 'update'])->name('update');
+        Route::patch('{reminderId}/status', [ReminderController::class, 'updateStatus'])->name('status.update');
+        Route::patch('{reminderId}/timeSchedules/{timeScheduleId}/status', [ReminderController::class, 'updateTimeScheduleStatus'])
+            ->name('timeSchedule.status.update');
 
         Route::prefix('assets')->name('assets.')->group(function () {
             Route::get('colors',[ReminderController::class,'getColors'])->name('colors');
