@@ -37,6 +37,11 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('users')->name('users.')->group(function () {
+        Route::prefix('profile')->name('profile')->group(function () {
+            Route::get('edit',[UserController::class, 'edit'])->name('edit');
+            Route::patch('update', [UserController::class, 'update'])->name('update');
+        });
+
         Route::post('store', [UserController::class, 'store'])->name('store');
     });
 

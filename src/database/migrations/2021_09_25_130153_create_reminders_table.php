@@ -18,6 +18,7 @@ class CreateRemindersTable extends Migration
             $table->string('title');
             $table->string('description');
             $table->integer('status')->default(\App\Models\Reminder::STATUS_ACTIVE);
+            $table->foreignId('user_id')->constrained('users');
             $table->foreignId('shape_id')->constrained('shapes');
             $table->foreignId('color_id')->constrained('colors');
             $table->softDeletes();

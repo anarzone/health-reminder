@@ -31,9 +31,7 @@ class SocialController extends Controller
 
         $socialUser = Socialite::driver($provider)->stateless()->user();
 
-        $data = $this->socialAccountService->handleLogin($provider, $socialUser);
-
-        dd($data);
+        return $this->socialAccountService->handleLogin($provider, $socialUser);
     }
 
     public function verifyProvider($provider): bool

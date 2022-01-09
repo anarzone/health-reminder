@@ -24,6 +24,7 @@ class ReminderService
      */
     public function getAll($filters){
         $query = $this->reminderModel->newQuery();
+        $query = $query->where('user_id',auth()->user()->id);
 
         if(isset($filters)){
             $query = $query->join('date_schedules as d', 'reminders.id','=','d.reminder_id');
@@ -51,6 +52,7 @@ class ReminderService
         $reminder = $this->reminderModel->updateOrCreate(['id' => $data['id'] ?? null], [
             'title' => $data['title'],
             'description' => $data['description'],
+            'user_id' => auth()->user()->id,
             'shape_id' => $data['shape_id'],
             'color_id' => $data['color_id'],
         ]);

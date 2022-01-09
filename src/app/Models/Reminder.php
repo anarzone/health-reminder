@@ -14,21 +14,25 @@ class Reminder extends Model
     const STATUS_DONE = 2;
     const STATUS_MISSED = 3;
 
-    protected $fillable = ['title','description','status','shape_id','color_id'];
+    protected $fillable = ['title','description','status','user_id','shape_id','color_id'];
 
     public function dateSchedule(){
-        return $this->hasOne(DateSchedule::class,'reminder_id');
+        return $this->hasOne(DateSchedule::class);
     }
 
     public function timeSchedules(){
-        return $this->hasMany(TimeSchedule::class,'reminder_id');
+        return $this->hasMany(TimeSchedule::class);
     }
 
     public function shape(){
-        return $this->belongsTo(Shape::class,'shape_id');
+        return $this->belongsTo(Shape::class);
     }
 
     public function color(){
-        return $this->belongsTo(Color::class,'color_id');
+        return $this->belongsTo(Color::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }
