@@ -17,15 +17,15 @@ class Reminder extends Model
     protected $fillable = ['title','description','status','user_id','shape_id','color_id'];
 
     public function dateSchedule(){
-        return $this->hasOne(DateSchedule::class);
+        return $this->hasOne(DateSchedule::class, 'reminder_id');
     }
 
     public function timeSchedules(){
-        return $this->hasMany(TimeSchedule::class);
+        return $this->hasMany(TimeSchedule::class, 'reminder_id');
     }
 
     public function shape(){
-        return $this->belongsTo(Shape::class);
+        return $this->belongsTo(Shape::class, 'shape_id');
     }
 
     public function color(){
