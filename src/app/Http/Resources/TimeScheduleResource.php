@@ -15,6 +15,7 @@ class TimeScheduleResource extends JsonResource
     public function toArray($request)
     {
         return [
+            'id' => $this->id,
             'dose' => $this->dose,
             'time' => $this->time,
             'status' => $this->status,

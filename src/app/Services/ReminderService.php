@@ -40,6 +40,11 @@ class ReminderService
             if (isset($filters['end_date'])){
                 $query = $query->whereDate('d.end_date','<=', Carbon::make($filters['end_date'])->toDate());
             }
+            if(isset($filters['days'])){
+                $query = $query->filter(function ($q) use ($filters){
+                    dd($filters);
+                });
+            }
             if(isset($filters['shape'])){
                 $query = $query->where('sh.id','=',intval($filters['shape']));
             }

@@ -15,7 +15,7 @@ class Article extends Model implements HasMedia
 
     protected $fillable = ['title', 'body'];
 
-    private $translatable = ['title', 'body'];
+    private array $translatable = ['title', 'body'];
 
     public function registerMediaConversions(Media $media = null): void
     {
