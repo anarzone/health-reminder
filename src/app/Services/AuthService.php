@@ -18,7 +18,7 @@ class AuthService
         return new Response([
             'status' => Response::HTTP_UNAUTHORIZED,
             'errors' => [
-                'unauthrized_access' => 'Credentials not match'
+                'unauthorized_access' => 'Credentials not match'
             ]
         ],Response::HTTP_UNAUTHORIZED);
     }

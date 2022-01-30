@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Models\User;
-use App\Notifications\AdminResetPassword;
 use App\Notifications\ResetPassword;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +13,6 @@ class PasswordRecoverService
 {
     public function __construct(private User $userModel){}
 
-
     /**
      * @param $email
      */
@@ -22,7 +20,8 @@ class PasswordRecoverService
         $user = $this->userModel->where('email', $email)->first();
 
         if($user){
-            $token = Str::random(100);
+            $token = $this->generateOtp();
+
             $user->notify(new ResetPassword($token));
 
             DB::table('password_resets')->insert(
@@ -38,7 +37,7 @@ class PasswordRecoverService
     public function resetPassword($data){
         $lastRecord = DB::table('password_resets')
             ->where('email',$data['email'])
-            ->where('token',$data['token'])
+            ->where('token',$data['otp_token'])
             ->first();
 
         if (!$lastRecord || $this->isResetPasswordExpired($lastRecord->token)){
@@ -56,6 +55,16 @@ class PasswordRecoverService
     private function isResetPasswordExpired(string $token): bool
     {
         $password_reset = DB::table('password_resets')->where('token', $token)->latest()->first();
-        return Carbon::parse(Carbon::now())->diffInMinutes($password_reset->created_at) > 59;
+        return Carbon::parse(Carbon::now())->diffInMinutes($password_reset->created_at) > 30;
+    }
+
+    private function generateOtp(){
+        $otp = '';
+
+        for($i=0; $i < 6; $i++){
+            $otp .= rand(0,9);
+        }
+
+        return $otp;
     }
 }

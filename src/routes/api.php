@@ -17,7 +17,7 @@ Route::prefix('v1')->group(function () {
         Route::get('{provider}/callback',[SocialController::class,'handleCallback'])->name('handleCallback');
 
         Route::post('forgot-password', [PasswordRecoverController::class,'sendResetEmail'])->name('password.forgot');
-        Route::post('reset-password/', [PasswordRecoverController::class,'resetPassword'])->name('password.reset');
+        Route::post('reset-password', [PasswordRecoverController::class,'resetPassword'])->name('password.reset');
     });
 
     Route::prefix('reminders')->name('reminders.')->group(function () {

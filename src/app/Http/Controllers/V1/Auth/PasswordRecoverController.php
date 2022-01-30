@@ -25,7 +25,7 @@ class PasswordRecoverController extends Controller
     public function resetPassword(Request $request){
         Validator::make($request->all(), [
             'email' => 'required|email|exists:password_resets,email',
-            'token' => 'required|string',
+            'otp_token' => 'required|string',
             'password' => 'required|min:8|confirmed',
             'password_confirmation' => 'required|min:8',
         ])->validate();
@@ -39,8 +39,8 @@ class PasswordRecoverController extends Controller
         return response([
             [
                 'errors' => [
-                    "token" => [
-                        "Token is expired."
+                    "otp_token" => [
+                        "Otp token is expired."
                     ]
                 ]
             ],

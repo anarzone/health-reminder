@@ -39,7 +39,7 @@ class ResetPassword extends Notification
     {
         return (new MailMessage)
                     ->line('Do not reply this mail. This is reset password mail.')
-                    ->action('Reset password: ', url('?reset-token='.$this->token))
+                    ->line('Otp code: '.$this->token)
                     ->line('Thank you for using our application!');
     }
 
