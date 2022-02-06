@@ -10,16 +10,16 @@ class SocialAccountService
 {
     public function __construct(public SocialAccount $socialAccountModel, public User $userModel){}
 
-    public function handleLogin($provider, $socialAccount){
-        $user = $this->userModel->updateOrCreate(['email' => $socialAccount->getEmail()],[
-            'name' => $socialAccount->getName(),
-            'email' => $socialAccount->getEmail(),
-            'password' => bcrypt($socialAccount->getEmail())
+    public function handleLogin($provider, $data){
+        $user = $this->userModel->updateOrCreate(['email' => $data['email']],[
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($data['email'])
         ]);
 
-        $user->socialAccounts()->updateOrCreate(['provider_user_id' => $socialAccount->getId()],[
+        $user->socialAccounts()->updateOrCreate(['provider_user_id' => $data['id']],[
             'provider' => $provider,
-            'provider_user_id' => $socialAccount->getId()
+            'provider_user_id' => $data['id']
         ]);
 
         return Response::success([

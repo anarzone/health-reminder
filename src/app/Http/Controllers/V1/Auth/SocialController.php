@@ -10,23 +10,32 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialController extends Controller
 {
-    public function __construct(public SocialAccountService $socialAccountService){}
+    public function __construct(public SocialAccountService $socialAccountService)
+    {
+    }
 
-
-    public function handleRedirect($provider){
-        if(!$this->verifyProvider($provider)){
+    /**
+     * @deprecated
+     */
+    public function handleRedirect($provider)
+    {
+        if (!$this->verifyProvider($provider)) {
             return response([
                 'error' => 'Wrong provider',
-            ],Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_UNAUTHORIZED);
         };
         return Socialite::driver($provider)->stateless()->redirect();
     }
 
-    public function handleCallback($provider){
-        if(!$this->verifyProvider($provider)){
+    /**
+     * @deprecated
+     */
+    public function handleCallback($provider)
+    {
+        if (!$this->verifyProvider($provider)) {
             return response([
                 'error' => 'Wrong provider',
-            ],Response::HTTP_UNAUTHORIZED);
+            ], Response::HTTP_UNAUTHORIZED);
         };
 
         $socialUser = Socialite::driver($provider)->stateless()->user();
@@ -34,8 +43,25 @@ class SocialController extends Controller
         return $this->socialAccountService->handleLogin($provider, $socialUser);
     }
 
-    public function verifyProvider($provider): bool
+    public function handleProviders($provider, Request $request)
     {
-        return in_array($provider, ['facebook','google']);
+        $request->validate([
+            'name' => 'required|string',
+            'email' => 'required|email',
+            'id' => 'required|numeric',
+        ]);
+
+        if (!$this->verifyProvider($provider)) {
+            return response([
+                'error' => 'Wrong provider',
+            ], Response::HTTP_UNAUTHORIZED);
+        };
+
+        return $this->socialAccountService->handleLogin($provider, $request->all());
+    }
+
+    private function verifyProvider($provider): bool
+    {
+        return in_array($provider, ['facebook', 'google']);
     }
 }
