@@ -34,17 +34,22 @@ class PasswordRecoverService
         }
     }
 
-    public function resetPassword($data){
+    public function verifyPassword($data): bool
+    {
         $lastRecord = DB::table('password_resets')
             ->where('email',$data['email'])
             ->where('token',$data['otp_token'])
             ->first();
 
         if (!$lastRecord || $this->isResetPasswordExpired($lastRecord->token)){
-            return null;
+            return false;
         }
 
-        return $this->userModel->where('email', $lastRecord->email)
+        return true;
+    }
+
+    public function resetPassword($data){
+        return $this->userModel->where('email', $data['email'])
             ->update(["password" => Hash::make($data['password'])]);
     }
 
@@ -58,7 +63,8 @@ class PasswordRecoverService
         return Carbon::parse(Carbon::now())->diffInMinutes($password_reset->created_at) > 30;
     }
 
-    private function generateOtp(){
+    private function generateOtp(): string
+    {
         $otp = '';
 
         for($i=0; $i < 6; $i++){

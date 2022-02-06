@@ -10,9 +10,12 @@ use Illuminate\Support\Facades\Validator;
 
 class PasswordRecoverController extends Controller
 {
-    public function __construct(private PasswordRecoverService $passwordRecoverService){}
+    public function __construct(private PasswordRecoverService $passwordRecoverService)
+    {
+    }
 
-    public function sendResetEmail(Request $request){
+    public function sendResetEmail(Request $request)
+    {
         Validator::make($request->all(), [
             'email' => 'required|email'
         ])->validate();
@@ -22,28 +25,39 @@ class PasswordRecoverController extends Controller
         return Response::success([]);
     }
 
-    public function resetPassword(Request $request){
+    public function verifyPassword(Request $request): Response
+    {
+        $request->validate([
+            'otp_token' => 'required|string',
+        ]);
+
+        $response = $this->passwordRecoverService->verifyPassword($request->all());
+
+        if ($response) {
+            return Response::success([]);
+        }
+
+        return new Response([
+            [
+                'errors' => [
+                    'otp_token' => [
+                        'Otp token is false or expired.'
+                    ]
+                ]
+            ],
+        ], Response::HTTP_UNPROCESSABLE_ENTITY);
+    }
+
+    public function resetPassword(Request $request)
+    {
         Validator::make($request->all(), [
             'email' => 'required|email|exists:password_resets,email',
-            'otp_token' => 'required|string',
             'password' => 'required|min:8|confirmed',
             'password_confirmation' => 'required|min:8',
         ])->validate();
 
-        $response = $this->passwordRecoverService->resetPassword($request->all());
+        $this->passwordRecoverService->resetPassword($request->all());
 
-        if($response){
-            return Response::success([]);
-        }
-
-        return response([
-            [
-                'errors' => [
-                    "otp_token" => [
-                        "Otp token is expired."
-                    ]
-                ]
-            ],
-        ],Response::HTTP_UNPROCESSABLE_ENTITY);
+        return Response::success([]);
     }
 }
