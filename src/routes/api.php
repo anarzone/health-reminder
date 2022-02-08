@@ -15,11 +15,11 @@ Route::prefix('v1')->group(function () {
         Route::post('logout',[AuthController::class,'logout'])->name('logout');
 //        Route::get('{provider}',[SocialController::class,'handleRedirect'])->name('handleRedirect');
 //        Route::get('{provider}/callback',[SocialController::class,'handleCallback'])->name('handleCallback');
-        Route::post('{provider}',[SocialController::class,'handleProviders'])->name('handleProviders');
-
         Route::post('forgot-password', [PasswordRecoverController::class,'sendResetEmail'])->name('password.forgot');
         Route::post('verify-password', [PasswordRecoverController::class,'verifyPassword'])->name('password.verify');
         Route::post('reset-password', [PasswordRecoverController::class,'resetPassword'])->name('password.reset');
+
+        Route::post('{provider}',[SocialController::class,'handleProviders'])->name('handleProviders');
     });
 
     Route::prefix('reminders')->name('reminders.')->group(function () {
