@@ -24,7 +24,8 @@ class ReminderResource extends JsonResource
             'end_date' => Carbon::make($this->dateSchedule->end_date)->toDateString(),
             'every_selected_day' => $this->dateSchedule->every_selected_day,
             'time_schedules' => TimeScheduleResource::collection($this->timeSchedules),
-            'shape' => $this->shape->name
+            'shape' => $this->shape->name,
+            'color_id' => $this->color_id,
         ];
     }
 }
