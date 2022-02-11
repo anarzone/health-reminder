@@ -32,6 +32,7 @@ class ReminderService
                     'reminders.id as id',
                     'reminders.status as status',
                     'reminders.title as title',
+                    'reminders.color_id',
                     'reminders.description as description',
                     'sh.id as shape_id',
                 )
