@@ -25,7 +25,7 @@ class PasswordRecoverController extends Controller
         return Response::success([]);
     }
 
-    public function verifyPassword(Request $request): Response
+    public function verifyPassword(Request $request): Response|array
     {
         $request->validate([
             'otp_token' => 'required|string',
